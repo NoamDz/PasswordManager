@@ -14,9 +14,24 @@ class UserRead(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class Token(BaseModel):
     access_token: str
-    token_type: str = "bearer" 
+    token_type: str = "bearer"
+
+
+# Vault schemas
+class VaultIn(BaseModel):
+    blob: str  # base64-encoded
+    version: int
+
+
+class VaultOut(BaseModel):
+    blob: str
+    version: int
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True 

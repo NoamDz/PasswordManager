@@ -1,0 +1,22 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: pm-db
+    environment:
+      POSTGRES_USER: pm_user
+      POSTGRES_PASSWORD: pm_pass
+      POSTGRES_DB: password_manager
+    ports:
+      - "5432:5432"
+    volumes:
+      - pm_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pm_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pm_db_data:
+    name: pm_db_data 
