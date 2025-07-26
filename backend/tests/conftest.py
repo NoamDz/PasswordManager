@@ -13,6 +13,23 @@ except ImportError:  # Legacy versions
 from sqlmodel import SQLModel, Session
 from testcontainers.postgres import PostgresContainer
 
+
+warnings.filterwarnings(
+    "ignore",
+    message="'crypt' is deprecated and slated for removal in Python 3.13",
+    category=DeprecationWarning,
+    module=r"passlib\\.utils",
+)
+
+# Passlib's argon2 handler accesses argon2.__version__, which is deprecated.
+warnings.filterwarnings(
+    "ignore",
+    message="Accessing argon2.__version__ is deprecated",
+    category=DeprecationWarning,
+    module=r"passlib\\.handlers\\.argon2",
+)
+
+
 from backend.app.main import app  # noqa: E402, import after env setup
 from backend.app.database import engine, get_session  # noqa: E402
 
@@ -61,19 +78,4 @@ async def client(db_session):  # noqa: PT004, PT019
         async with AsyncClient(app=app, base_url="http://test") as ac:  # type: ignore[arg-type]
             yield ac
 
-    app.dependency_overrides.clear()
-
-warnings.filterwarnings(
-    "ignore",
-    message="'crypt' is deprecated and slated for removal in Python 3.13",
-    category=DeprecationWarning,
-    module=r"passlib\\.utils",
-)
-
-# Passlib's argon2 handler accesses argon2.__version__, which is deprecated.
-warnings.filterwarnings(
-    "ignore",
-    message="Accessing argon2.__version__ is deprecated",
-    category=DeprecationWarning,
-    module=r"passlib\\.handlers\\.argon2",
-) 
+    app.dependency_overrides.clear() 
