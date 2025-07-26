@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "nvm": "^0.0.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0"
+  },
+  "scripts": {
+    "test:fe": "npm --prefix frontend run test --run"
+  }
+}

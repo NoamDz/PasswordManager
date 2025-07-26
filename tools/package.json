@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "pm-tools",
+  "scripts": {
+    "e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0"
+  }
+} 
