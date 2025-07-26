@@ -1,5 +1,6 @@
 import asyncio
 import os
+import warnings
 from typing import Generator
 
 import pytest
@@ -11,6 +12,23 @@ except ImportError:  # Legacy versions
     ASGITransport = None  # type: ignore
 from sqlmodel import SQLModel, Session
 from testcontainers.postgres import PostgresContainer
+
+
+warnings.filterwarnings(
+    "ignore",
+    message="'crypt' is deprecated and slated for removal in Python 3.13",
+    category=DeprecationWarning,
+    module=r"passlib\\.utils",
+)
+
+# Passlib's argon2 handler accesses argon2.__version__, which is deprecated.
+warnings.filterwarnings(
+    "ignore",
+    message="Accessing argon2.__version__ is deprecated",
+    category=DeprecationWarning,
+    module=r"passlib\\.handlers\\.argon2",
+)
+
 
 from backend.app.main import app  # noqa: E402, import after env setup
 from backend.app.database import engine, get_session  # noqa: E402

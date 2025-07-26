@@ -1,5 +1,5 @@
 import base64
-from datetime import datetime
+from datetime import datetime, UTC
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
@@ -42,7 +42,7 @@ def upsert_vault(
     new_version = (last.version + 1) if last else 1
 
     blob_bytes = base64.b64decode(vault_in.blob)
-    vault = Vault(user_id=current_user.id, blob=blob_bytes, version=new_version, updated_at=datetime.utcnow())
+    vault = Vault(user_id=current_user.id, blob=blob_bytes, version=new_version, updated_at=datetime.now(UTC))
     session.add(vault)
     session.commit()
     session.refresh(vault)
