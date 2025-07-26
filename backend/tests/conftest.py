@@ -1,5 +1,6 @@
 import asyncio
 import os
+import warnings
 from typing import Generator
 
 import pytest
@@ -60,4 +61,19 @@ async def client(db_session):  # noqa: PT004, PT019
         async with AsyncClient(app=app, base_url="http://test") as ac:  # type: ignore[arg-type]
             yield ac
 
-    app.dependency_overrides.clear() 
+    app.dependency_overrides.clear()
+
+warnings.filterwarnings(
+    "ignore",
+    message="'crypt' is deprecated and slated for removal in Python 3.13",
+    category=DeprecationWarning,
+    module=r"passlib\\.utils",
+)
+
+# Passlib's argon2 handler accesses argon2.__version__, which is deprecated.
+warnings.filterwarnings(
+    "ignore",
+    message="Accessing argon2.__version__ is deprecated",
+    category=DeprecationWarning,
+    module=r"passlib\\.handlers\\.argon2",
+) 
